@@ -1,0 +1,49 @@
+* {
+  box-sizing: border-box;
+}
+
+#turn_state {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  width: 500px;
+  height: 500px;
+  overflow:hidden;
+}
+#main {
+  padding: 60px;
+  margin: 0 auto;
+}
+
+div .inputBox {
+  padding: 0 auto;
+}
+#imageState {
+  margin: 0 auto;
+}
+
+
+
+body {
+  background: #fdfdfd;
+}
+
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+
+
+@import 'directives/main';
+@import 'home/main';
+@import 'about/main';
+@import 'tutorial/main';
+@import 'login/main';

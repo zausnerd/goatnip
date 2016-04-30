@@ -1,0 +1,15 @@
+ GET curl "https://api.clarifai.com/v1/tag/" \
+    --data-urlencode "url=https://samples.clarifai.com/metro-north.jpg"  \
+    -H "Authorization: Bearer tQkyp8Viuk3tsALgWrbuUUC0TJ5bW8"
+  
+
+
+
+
+  curl -X POST "https://api.clarifai.com/v1/token/" \
+    -d "client_id=uvrP0pIZ4geD965uuenjNi2kKLM0drNW3KyX0xLW" \
+    -d "client_secret=51FHnvhF87S1OJXvnyl-SgJ9GvdUoqbi4hyz0x4_" \
+    -d "grant_type=client_credentials"
+
+
+    ACCESS TOKEN GENERATED tQkyp8Viuk3tsALgWrbuUUC0TJ5bW8
