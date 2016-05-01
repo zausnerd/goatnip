@@ -52,6 +52,12 @@ var seedUsers = function() {
         email: 'zausnerd@gmail.com',
         password: 'password',
         isAdmin: 'true'
+    },
+    {
+        name: 'John Cena',
+        email: 'john@john.com',
+        password: 'password',
+        isAdmin: 'true'
     }];
     return User.create(users);
 };
