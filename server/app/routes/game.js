@@ -43,7 +43,7 @@ module.exports = router;
 
 
 
-var token = {Authorization: 'Bearer 8lRommUKT8s7NBDfylzR5PHestdCnG'};
+var token = {Authorization: 'Bearer SPy5P8JZX2qY3L0rkEUnAlLQyLy6Hd'};
 var currentGame;
 
 function makeOptions(url) {
@@ -53,7 +53,7 @@ function makeOptions(url) {
             url: url
         }),
         headers: {
-            Authorization: 'Bearer 8lRommUKT8s7NBDfylzR5PHestdCnG',
+            Authorization: 'Bearer SPy5P8JZX2qY3L0rkEUnAlLQyLy6Hd',
            'Content-type': 'application/json',
         }
     };
@@ -63,15 +63,22 @@ function makeTags(response) {
 }
 // Get all available games
 router.get('/', function(req, res, next) {
-    Game.find({isStarted: false})
-    .then(games => res.json(games))
+    // Game.find({isStarted: false})
+    Game.find({})
+    .then(function(array) {
+        array.forEach(function(elem) {
+            elem.populate('player1');
+        });
+        return array;
+    })
+    .then(response => res.json(response))
     .then(null, next);
 });
 
 // Get one game document
 router.get('/:gameId', function(req, res, next) {
     Game.findById(req.params.gameId)
-    .then(game => res.json(order))
+    .then(game => res.json(game))
     .then(null, next);
 });
 
@@ -87,10 +94,12 @@ router.post('/', function(req, res, next) {
 
 //Make a move. The bearer token is used to send the game token
 router.post('/:gameId', function(req, res, next) {
+    var tags = '';
     var playerNum = 'player' + req.body.playerNum;
     var gameQuery = {};
     var gameDoc = '';
     gameQuery[playerNum] = req.body.playerId;
+    console.log('GAME DOC', gameDoc);
     Game.findOne(gameQuery)
     .then(function(game) {
         var options = makeOptions(req.body.url);
@@ -98,11 +107,10 @@ router.post('/:gameId', function(req, res, next) {
         return request("https://api.clarifai.com/v1/tag/",options)
     })
     .then(function(response) {
-        var tags = makeTags(response);
+        tags = makeTags(response);
         gameDoc.submissions++;
         gameDoc[playerNum + 'Tags'].push(tags);
         gameDoc[playerNum + 'URL'].push(req.body.url);
-
         playerNum === 'player1' ? gameDoc.isPlayer1Turn = false : gameDoc.isPlayer1Turn = true;
         if (gameDoc.submissions >= 2) {
             var calculation  = gameDoc.calcMatch();
@@ -112,10 +120,12 @@ router.post('/:gameId', function(req, res, next) {
             }
             gameDoc.submissions = 0;
         }
+
         return gameDoc.save();
     })
     .then(function() {
-        res.send(gameDoc);
+        console.log("TAGS", tags);
+        res.send(tags);
     })
     .catch(error => res.json(error));
 });
@@ -124,9 +134,8 @@ router.post('/:gameId', function(req, res, next) {
 router.put('/:gameId', function(req, res, next) {
     Game.findById(req.params.gameId)
     .then(function(game) {
-
         game.player2 = req.body.player2;
-
+        game.isStarted = true;
         return game.save();
     })
     .then(function(game) {

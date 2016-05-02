@@ -1,0 +1,10 @@
+<h2>Welcome to Mind Meld!</h2>
+<h4>Create a new game, or join an existing one</h4>
+
+<button ng-click='createGame()'>Create New Game</button>
+
+
+<div ng-repeat="game in openGames">
+  <button ng-click="joinGame(game._id)">{{game.player1}}</button>
+</div>
+

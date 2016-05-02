@@ -1,0 +1,19 @@
+<button ng-hide='isSignedIn' ng-click='showForm()'>Sign up here!</button>
+<button ng-show='isSignedIn'ng-click='createGame()'>Create New Game</button>
+<button ng-show='isSignedIn' ng-click='findGame()'>Find Open Game</button>
+
+<form ng-show='isFormShowing'id="login-form" name="signUpForm" ng-submit='signUp(signUpInfo)'>
+
+    <alert type="danger" ng-show="error">
+        {{ error }}
+    </alert>
+    <div class="form-group">
+        <label for="signUp-name">Name</label>
+        <input type="text" ng-required="string" ng-model="signUpInfo.name" class="form-control" id="signUp-name" placeholder="Name">
+    </div>
+    <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" ng-model="signUpInfo.email" class="form-control" id="email" placeholder="Enter email">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>

@@ -1,14 +1,19 @@
 app.config(function ($stateProvider) {
-    $stateProvider.state('home', {
-        url: '/',
-        templateUrl: 'js/home/home.html',
-        controller: 'BoardController'
+    $stateProvider.state('board', {
+        url: '/board/:gameId',
+        templateUrl: 'js/home/board.html',
+        controller: 'BoardController',
+        resolve: {
+          gameId : function($stateParams) {
+            return $stateParams.gameId;
+          }
+        }
     });
 });
 
 
 
-app.controller('BoardController', function($scope, TurnFactory) {
+app.controller('BoardController', function($scope, TurnFactory, gameId) {
   $scope.urlSubmit = function() {
     if (TurnFactory.isValidImageType($scope.url)) {
       $scope.leftImage = $scope.url;
@@ -22,10 +27,10 @@ app.controller('BoardController', function($scope, TurnFactory) {
   $scope.tags = 'No tags! use an image url to submit the image';
   $scope.leftImage = "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
   $scope.getTags = function() {
-    TurnFactory.getTags($scope.url)
+    var localPlayerData = JSON.parse(localStorage.getItem('mindMeld'));
+    TurnFactory.getTags($scope.url, gameId, localPlayerData.playerNum)
     .then(function(response) {
-      console.log(response.data.results[0].result.tag.classes,'***');
-      $scope.tags = response.data.results[0].result.tag.classes;
+      $scope.tags = response;
     })
   }
 });
@@ -39,16 +44,21 @@ app.factory('TurnFactory', function($http, $log) {
     return true;
   }
 
-  factory.getTags = function(url) {
+  factory.getTags = function(url, gameId, playerNum) {
     // $http({
     //   method: 'POST',
     //   url: 'https://api.clarifai.com/v1/tag/',
     //   headers: {Authorization: 'Bearer tQkyp8Viuk3tsALgWrbuUUC0TJ5bW8'},
     //   data: {url: url}
     // })
-    return $http.post('https://api.clarifai.com/v1/tag/', {url: url}, {headers: {Authorization: 'Bearer tQkyp8Viuk3tsALgWrbuUUC0TJ5bW8'}})
+    //return $http.post('https://api.clarifai.com/v1/tag/', {url: url}, {headers: {Authorization: 'Bearer 8lRommUKT8s7NBDfylzR5PHestdCnG'}})
+    var localPlayerData = JSON.parse(localStorage.getItem('mindMeld'));
+    var request = {playerNum : localPlayerData.playerNum, url: url, playerId: localPlayerData.id};
+    console.log("GET TAGS", gameId, request);
+    return $http.post('/api/game/' + gameId,request)
     .then(function(response) {
-      return response;
+      console.log("RESPONSE FROM CLARIFAI", response);
+      return response.data;
     });
   }
   return factory;

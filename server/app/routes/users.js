@@ -19,13 +19,13 @@ const User = mongoose.model('User');
 //   .catch(next);
 // });
 
-router.get('/', Auth.assertAdmin, function(req,res,next) {
+router.get('/', function(req,res,next) {
   User.find({})
   .then((users) => res.json(users))
   .catch(next);
 });
 
-router.get('/:userId', Auth.assertAdminOrSelf, function(req, res) {
+router.get('/:userId', function(req, res) {
   res.json(req.requestedUser);
 });
 

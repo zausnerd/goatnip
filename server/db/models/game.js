@@ -5,8 +5,7 @@ var schema = new mongoose.Schema({
     player1: {
         type: mongoose.Schema.Types.ObjectId,
         default: null,
-        ref: 'User',
-            required: true
+        ref: 'User'
     },
     player1Tags: {
         type: Array,
