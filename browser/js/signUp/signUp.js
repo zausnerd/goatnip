@@ -46,7 +46,9 @@ app.factory('gameSetupFactory', function($http) {
   }
 
   factory.joinGame = function(gameId) {
-    return $http.put('/api/game/' + gameId, {player2: factory.currentPlayer})
+    var localPlayerData = JSON.parse(localStorage.getItem('mindMeld'));
+    console.log(this.currentPlayer, "CURRENT PLAYER");
+    return $http.put('/api/game/' + gameId, {player2: localPlayerData.id})
     .then(function(game) {
       console.log(game,"PLAYER 2 JOINED : ", game);
       var localPlayerData = JSON.parse(localStorage.getItem('mindMeld'));

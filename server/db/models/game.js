@@ -95,8 +95,7 @@ schema.methods.calcMatch = function() {
     let union = new Set([...player1Set, ...player2Set]);
     let intersection = new Set([...player1Set].filter(elem => player2Set.has(elem)));
 
-    console.log(intersection.size,union.size, '****');
-    return intersection.size / union.size;
+    return Math.trunc((intersection.size / union.size) * 100);
 }
 mongoose.model('Game', schema);
 // module.exports = schema;

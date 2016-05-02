@@ -108,23 +108,24 @@ router.post('/:gameId', function(req, res, next) {
     })
     .then(function(response) {
         tags = makeTags(response);
-        gameDoc.submissions++;
+        gameDoc.submissions+= 1;
         gameDoc[playerNum + 'Tags'].push(tags);
         gameDoc[playerNum + 'URL'].push(req.body.url);
         playerNum === 'player1' ? gameDoc.isPlayer1Turn = false : gameDoc.isPlayer1Turn = true;
-        if (gameDoc.submissions >= 2) {
+        if (gameDoc.submissions % 2 === 0 && gameDoc.submissions !== 0) {
             var calculation  = gameDoc.calcMatch();
+            gameDoc.turns.push(calculation);
             if (gameDoc.calcMatch() >= 0.60) {
                 console.log('WON!!!', calculation);
                 gameDoc.isWon = true;
             }
-            gameDoc.submissions = 0;
         }
 
         return gameDoc.save();
     })
-    .then(function() {
-        console.log("TAGS", tags);
+    .then(function(game) {
+        //console.log("TAGS", tags);
+        console.log("TOTAL SUBMISSIONS", game.submissions);
         res.send(tags);
     })
     .catch(error => res.json(error));
