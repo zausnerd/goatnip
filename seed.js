@@ -27,7 +27,7 @@ var User = mongoose.model('User');
 // var Game = require('./server/db/models/game');
 var Game = mongoose.model('Game');
 
-
+                              ////////////////////////////////////
 
 var wipeUsers = function() {
     var removeUsers = User.remove({});

@@ -64,6 +64,14 @@ app.controller('BoardController', function($scope, TurnFactory, gameId, $interva
       $scope.turns = game.data.turns;
       if (game.data.submissions % 2 === 0 && game.data.submissions !== 0) {
         $scope.matchPercent = game.data.turns[game.data.turns.length - 1];
+        if ($scope.playerNum == 2) {
+          $scope.rightImage = game.data.player1URL[game.data.player1URL.length - 1];
+        } $scope.partnerTags = game.data.player1Tags[game.data.player1Tags.length - 1];
+        if ($scope.playerNum == 1) {
+          $scope.rightImage = game.data.player2URL[game.data.player2URL.length - 1];
+          $scope.partnerTags = game.data.player2Tags[game.data.player2Tags.length - 1];
+          console.log(partnerTags);
+        }
       }
       if ($scope.matchPercent > 60) {
         $scope.isWon = true;
